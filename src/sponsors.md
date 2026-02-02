@@ -10,7 +10,7 @@ We thank our sponsors for their generous support and for providing real-world pr
   Empowering education through technology and innovation.
 
 - **Gradstreet**  
-  ![Gradstreet Logo](<img src="images/gradstreet.png" alt="Gradstreet Logo" style="border-radius: 15px;" />)  
+  ![Gradstreet Logo](images/gradstreet.png)  
   Your pathway to career success.
 
 - **Supraja Technologies**  
