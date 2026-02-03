@@ -2,3 +2,7 @@
 title = "Sreenidhi HackFest'26"
 authors = []
 language = "en"
+
+[build]
+build-dir = "book"
+
