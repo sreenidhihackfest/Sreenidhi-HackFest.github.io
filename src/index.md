@@ -1,5 +1,3 @@
-# HACKFEST '26
-
 <style>
 /* Hero Section Styles */
 .hero-section {

@@ -957,7 +957,20 @@ html:not(.js) .sidebar-resize-handle {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 0.6rem 1.5rem;
+    padding: 0.8rem 2rem;
+    /* Increased padding */
+    height: auto;
+    min-height: 60px;
+    /* Increased height */
+    position: sticky;
+    /* Sticky header */
+    top: 0;
+    z-index: 1000;
+    /* Ensure it stays on top */
+    background: rgba(26, 21, 48, 0.95);
+    /* Dark background for visibility when sticky */
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid rgba(188, 19, 254, 0.2);
 }
 
 /* Header Left - Logo */
@@ -968,28 +981,18 @@ html:not(.js) .sidebar-resize-handle {
 
 .hackfest .menu-title {
     font-family: "Adriana", "Horizon", sans-serif;
-    font-size: 1.4rem;
+    font-size: 1.8rem;
+    /* Increased brand size */
     font-weight: 700;
     margin: 0;
-    background: linear-gradient(135deg, #bc13fe, #ff007f, #00f3ff);
-    background-size: 200% 200%;
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-    animation: gradient-shift 6s ease infinite;
+    color: #ffffff;
+    /* White text */
+    background: none;
+    /* Remove gradient */
+    -webkit-text-fill-color: initial;
+    /* Remove gradient text fill */
+    text-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
     white-space: nowrap;
-}
-
-@keyframes gradient-shift {
-
-    0%,
-    100% {
-        background-position: 0% 50%;
-    }
-
-    50% {
-        background-position: 100% 50%;
-    }
 }
 
 /* Header Right - Navigation + Theme Picker */
@@ -1002,109 +1005,101 @@ html:not(.js) .sidebar-resize-handle {
 /* Header Navigation Styles */
 .hackfest .header-nav {
     display: flex;
-    gap: 0.25rem;
+    gap: 0.8rem;
+    /* Increased gap */
     align-items: center;
     margin: 0;
     flex-wrap: nowrap;
 }
 
 .hackfest .header-nav .nav-link {
-    color: rgba(255, 255, 255, 0.85);
+    color: rgba(255, 255, 255, 0.8);
     text-decoration: none;
-    padding: 0.4rem 0.8rem;
-    border-radius: 6px;
-    font-size: 0.85em;
+    padding: 0.8rem 1.2rem;
+    /* Increased click area */
+    border-radius: 8px;
+    font-size: 1rem;
+    /* Slightly larger font */
     font-weight: 500;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: all 0.2s ease;
     white-space: nowrap;
     position: relative;
-    overflow: hidden;
-}
-
-.hackfest .header-nav .nav-link::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: -100%;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(188, 19, 254, 0.2), transparent);
-    transition: left 0.5s ease;
-}
-
-.hackfest .header-nav .nav-link:hover::before {
-    left: 100%;
+    border: 1px solid transparent;
 }
 
 .hackfest .header-nav .nav-link:hover {
-    background: rgba(188, 19, 254, 0.15);
-    color: #bc13fe;
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(188, 19, 254, 0.3);
+    color: #fff;
+    background: rgba(255, 255, 255, 0.1);
+    border-color: rgba(255, 255, 255, 0.2);
+    box-shadow: 0 0 10px rgba(188, 19, 254, 0.3);
+    text-shadow: 0 0 5px rgba(188, 19, 254, 0.5);
 }
 
 .hackfest .header-nav .nav-link.active {
-    background: linear-gradient(135deg, rgba(188, 19, 254, 0.2), rgba(255, 0, 127, 0.2));
-    color: #ff007f;
-    font-weight: 600;
-    box-shadow: 0 2px 8px rgba(255, 0, 127, 0.2);
+    background: rgba(188, 19, 254, 0.2);
+    color: #fff;
+    border-color: #bc13fe;
+    box-shadow: 0 0 10px rgba(188, 19, 254, 0.4);
 }
 
-/* Theme Picker Button Styling */
-.hackfest #mdbook-theme-toggle {
-    color: rgba(255, 255, 255, 0.8);
-    transition: all 0.3s ease;
-    padding: 0.6rem;
-    border-radius: 8px;
+/* Theme Picker Button Styling - Updated ID */
+.hackfest #theme-toggle {
+    color: rgba(255, 255, 255, 0.7);
+    transition: all 0.2s ease;
+    padding: 0.4rem;
+    border-radius: 6px;
 }
 
-.hackfest #mdbook-theme-toggle:hover {
-    background: rgba(188, 19, 254, 0.15);
-    color: #bc13fe;
-    transform: rotate(20deg) scale(1.1);
+.hackfest #theme-toggle:hover {
+    color: #fff;
+    background: rgba(255, 255, 255, 0.1);
+    transform: none;
+    /* Removed rotation */
+    box-shadow: 0 0 10px rgba(188, 19, 254, 0.3);
 }
 
 /* Responsive navigation */
 @media only screen and (max-width: 1200px) {
     .hackfest #mdbook-menu-bar {
-        padding: 1rem 1.5rem;
+        padding: 0.3rem 1rem;
+        /* Reduced padding */
     }
 
     .hackfest .menu-title {
-        font-size: 1.5rem;
+        font-size: 1.2rem;
     }
 
     .hackfest .header-nav .nav-link {
-        padding: 0.5rem 0.8rem;
-        font-size: 0.85em;
+        padding: 0.3rem 0.6rem;
+        font-size: 0.8em;
     }
 
     .hackfest .header-right {
-        gap: 1rem;
+        gap: 0.5rem;
     }
 }
 
 @media only screen and (max-width: 768px) {
     .hackfest .header-nav {
-        margin: 0.5rem 0;
+        margin: 0.2rem 0;
         order: 10;
         width: 100%;
         justify-content: center;
     }
 
     .hackfest .menu-title {
-        font-size: 1.8rem;
+        font-size: 1.1rem;
     }
 }
 
 @media only screen and (max-width: 768px) {
     .hackfest .header-nav {
-        gap: 0.3rem;
+        gap: 0.2rem;
     }
 
     .hackfest .header-nav .nav-link {
-        padding: 0.4rem 0.8rem;
-        font-size: 0.8em;
+        padding: 0.3rem 0.5rem;
+        font-size: 0.75em;
     }
 }
 

@@ -586,8 +586,20 @@ h6 {
 
 /* Background wrapper for plexus canvas */
 .hackfest .page-wrapper {
-    background-color: var(--bg);
+    background-color: transparent !important;
     position: relative;
+    z-index: 1;
+}
+
+/* Aggressively clear backgrounds to let body color show through */
+.page-wrapper,
+.page,
+.content,
+.content main,
+#mdbook-page-wrapper,
+#mdbook-content {
+    background-color: transparent !important;
+    background: transparent !important;
 }
 
 /* Canvas background positioning */
@@ -595,8 +607,8 @@ h6 {
     position: fixed;
     top: 0;
     left: 0;
-    width: 100%;
-    height: 100%;
+    width: 100vw;
+    height: 100vh;
     z-index: -10;
     pointer-events: none;
 }

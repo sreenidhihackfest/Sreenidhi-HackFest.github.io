@@ -14,19 +14,61 @@
 
     // Muted color palette from poster
     const colors = {
-        particle: 'rgba(188, 19, 254, 0.4)',      // Muted purple
-        line1: 'rgba(188, 19, 254, 0.15)',         // Faint purple
-        line2: 'rgba(255, 0, 127, 0.1)',           // Faint pink
-        line3: 'rgba(0, 243, 255, 0.08)',          // Faint cyan
+        particle: 'rgba(255, 255, 255, 0.9)',      // Bright White-Purple for visibility
+        line1: 'rgba(188, 19, 254, 0.6)',          // Visible purple
+        line2: 'rgba(255, 0, 127, 0.5)',           // Visible pink
+        line3: 'rgba(0, 243, 255, 0.5)',           // Visible cyan
+        orbs: [
+            'rgba(188, 19, 254, 0.15)', // Purple orb
+            'rgba(255, 0, 127, 0.15)',  // Pink orb
+            'rgba(0, 243, 255, 0.15)'   // Cyan orb
+        ]
     };
 
     // Configuration
     const config = {
-        particleCount: 80,
-        maxDistance: 150,
-        particleSpeed: 0.3,
-        particleSize: 2,
+        particleCount: 100, // Increased count
+        maxDistance: 200,   // Increased connection distance
+        particleSpeed: 0.4,
+        particleSize: 3,    // Larger particles
+        orbCount: 6,
+        orbSize: 450
     };
+
+    class Orb {
+        constructor() {
+            this.reset();
+        }
+
+        reset() {
+            this.x = Math.random() * canvas.width;
+            this.y = Math.random() * canvas.height;
+            this.vx = (Math.random() - 0.5) * 0.2;
+            this.vy = (Math.random() - 0.5) * 0.2;
+            this.radius = config.orbSize * (0.8 + Math.random() * 0.4);
+            this.color = colors.orbs[Math.floor(Math.random() * colors.orbs.length)];
+        }
+
+        update() {
+            this.x += this.vx;
+            this.y += this.vy;
+
+            // Bounce off edges gently
+            if (this.x < -this.radius) this.vx *= -1;
+            if (this.x > canvas.width + this.radius) this.vx *= -1;
+            if (this.y < -this.radius) this.vy *= -1;
+            if (this.y > canvas.height + this.radius) this.vy *= -1;
+        }
+
+        draw() {
+            const gradient = ctx.createRadialGradient(this.x, this.y, 0, this.x, this.y, this.radius);
+            gradient.addColorStop(0, this.color);
+            gradient.addColorStop(1, 'rgba(0,0,0,0)');
+
+            ctx.fillStyle = gradient;
+            ctx.fillRect(0, 0, canvas.width, canvas.height); // Fill entire canvas to blend
+        }
+    }
 
     class Particle {
         constructor() {
@@ -40,7 +82,7 @@
             this.y = Math.random() * canvas.height;
             this.vx = (Math.random() - 0.5) * config.particleSpeed;
             this.vy = (Math.random() - 0.5) * config.particleSpeed;
-            this.radius = Math.random() * config.particleSize + 1;
+            this.radius = Math.random() * config.particleSize + 1.5;
         }
 
         update() {
@@ -59,13 +101,27 @@
             ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
             ctx.fillStyle = colors.particle;
             ctx.fill();
+
+            // Add glow to particles
+            ctx.shadowBlur = 15;
+            ctx.shadowColor = 'rgba(255, 255, 255, 0.8)';
+            ctx.fill();
+            ctx.shadowBlur = 0;
         }
     }
 
+    let orbs = [];
+
     function initParticles() {
         particles = [];
+        orbs = [];
+
         for (let i = 0; i < config.particleCount; i++) {
             particles.push(new Particle());
+        }
+
+        for (let i = 0; i < config.orbCount; i++) {
+            orbs.push(new Orb());
         }
     }
 
@@ -85,8 +141,8 @@
                     else if (i % 3 === 2) lineColor = colors.line3;
 
                     ctx.beginPath();
-                    ctx.strokeStyle = lineColor.replace(/[\d.]+\)$/g, opacity * 0.2 + ')');
-                    ctx.lineWidth = 0.5;
+                    ctx.strokeStyle = lineColor.replace(/[\d.]+\)$/g, (opacity * 0.8) + ')'); // Much higher opacity
+                    ctx.lineWidth = 1.5; // Thicker lines
                     ctx.moveTo(particles[i].x, particles[i].y);
                     ctx.lineTo(particles[j].x, particles[j].y);
                     ctx.stroke();
@@ -98,12 +154,23 @@
     function animate() {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
 
+        // Draw background orbs first (lava lamp effect)
+        // Use composite operation for better blending
+        ctx.globalCompositeOperation = 'screen';
+        orbs.forEach(orb => {
+            orb.update();
+            orb.draw();
+        });
+
+        // Reset for particles to ensure they draw ON TOP meaningfully
+        ctx.globalCompositeOperation = 'source-over';
+
+        connectParticles(); // Draw lines first so particles appear on top
+
         particles.forEach(particle => {
             particle.update();
             particle.draw();
         });
-
-        connectParticles();
 
         animationId = requestAnimationFrame(animate);
     }
@@ -135,5 +202,17 @@
         document.addEventListener('DOMContentLoaded', init);
     } else {
         init();
+    }
+
+    // Force HackFest Theme
+    try {
+        const currentTheme = localStorage.getItem('mdbook-theme');
+        if (currentTheme !== 'hackfest') {
+            localStorage.setItem('mdbook-theme', 'hackfest');
+            document.documentElement.classList.remove('light', 'rust', 'coal', 'navy', 'ayu');
+            document.documentElement.classList.add('hackfest');
+        }
+    } catch (e) {
+        console.log('Error setting theme:', e);
     }
 })();
